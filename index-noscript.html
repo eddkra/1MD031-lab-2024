@@ -1,0 +1,130 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Burgirburgir Online</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <header>
+        <span>Welcome to Burgirburgir Online</span>
+    </header>
+
+    <main>
+
+        <section id="burger-section">
+            <h2>Select burger</h2>
+            <p>This is where you execute burger selection</p>
+
+            <div class="burger-item">
+                <h3>The Fire Burger</h3>
+                <img src="/img/fire-burger.jpg" alt="Fire Burger">
+                <ul>
+                    <li>750 kCal</li>
+                    <li>Contains lactose</li>
+                    <li>Contains gluten</li>
+                </ul>
+            </div>
+
+            <div class="burger-item">
+                <h3>Fried Turkey Burger</h3>
+                <img src="/img/turkey-burger.jpg" alt="Turkey Burger">
+                <ul>
+                    <li>600 kCal</li>
+                    <li>Contains lactose</li>
+                    <li>Contains gluten</li>
+                </ul>
+            </div>
+
+            <div class="burger-item">
+                <h3>A Double w/ Cheese</h3>
+                <img src="/img/double-cheese.jpg" alt="Double Cheese Burger">
+                <ul>
+                    <li>1800 kCal</li>
+                    <li>Contains lactose</li>
+                    <li>Contains gluten</li>
+                </ul>
+            </div>
+
+        </section>
+
+        <section id="customer-section">
+            <h2>Customer information</h2>
+            <p>This is where you provide necessary information</p>
+
+            <h3>Delivery information:</h3>
+
+            <form>
+
+                <p>
+                    <label for="fullname">Full name</label>
+                    <input type="text" id="fullname" placeholder="First- and Last name" required>
+                </p>
+
+                <p>
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" placeholder="E-mail address" required>
+                </p>
+
+                <p>
+                    <label for="street">Street</label>
+                    <input type="text" id="street" placeholder="Street name" required>
+                </p>
+
+                <p>
+                    <label for="house">House</label>
+                    <input type="number" id="house" placeholder="House number" required>
+                </p>
+
+                <p>
+                    <label for="payment">Payment options</label>
+                    <select id="payment">
+                        <option selected>Credit card</option>
+                        <option>Swish</option>
+                        <option>PayPal</option>
+                        <option>Klarna</option>
+                    </select>
+                </p>
+
+                <p>
+                    <label>Gender</label>
+
+                    <label class="gender-option">
+                        <input type="radio" name="gender" checked> Male
+                    </label>
+
+                    <label class="gender-option">
+                        <input type="radio" name="gender"> Female
+                    </label>
+
+                    <label class="gender-option">
+                        <input type="radio" name="gender"> Non-binary
+                    </label>
+
+                    <label class="gender-option">
+                        <input type="radio" name="gender"> Undisclosed
+                    </label>
+                </p>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <button>
+        <img src="https://cdn-icons-png.flaticon.com/512/4297/4297679.png" alt="Order Button"
+            style="width: 20px; vertical-align: middle; filter: invert(1);">
+        Place my order!
+    </button>
+
+    <footer>
+        © 2025 Burgirburgir // no copyright plz
+    </footer>
+
+</body>
+
+</html>
