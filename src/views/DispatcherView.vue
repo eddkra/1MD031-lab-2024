@@ -2,10 +2,27 @@
   <div id="dispatcher">
 
     <div id="orderList">
-      <div v-for="(order, key) in orders" :key="key">
-        <strong>#{{ key }}</strong><br>
-        {{ order.orderItems.join(", ") }}<br>
-        {{ order.customer.fullname }}
+      <div 
+        v-for="(order, key) in orders" 
+        :key="key"
+        class="order-card"
+      >
+        <div class="order-id">Order #{{ key }}</div>
+
+        <div class="order-section">
+          <strong>Items:</strong>
+          <ul>
+            <li v-for="item in order.orderItems" :key="item">{{ item }}</li>
+          </ul>
+        </div>
+
+        <div class="order-section">
+          <strong>Customer:</strong>
+          <div>{{ order.customer.fullname }}</div>
+          <div>{{ order.customer.email }}</div>
+          <div>Payment: {{ order.customer.payment }}</div>
+          <div>Gender: {{ order.customer.gender }}</div>
+        </div>
       </div>
 
       <button @click="clearQueue">Clear Queue</button>
@@ -79,6 +96,30 @@ export default {
   padding: 1em;
   border-radius: 6px;
   font-size: 14px;
+  width: 300px;
+}
+
+.order-card {
+  background: rgba(255,255,255,0.95);
+  padding: 1em 1.2em;
+  margin-bottom: 1em;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.order-id {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 0.6em;
+}
+
+.order-section {
+  margin-bottom: 0.8em;
+}
+
+.order-section ul {
+  margin: 0.3em 0 0 1.2em;
+  padding: 0;
 }
 
 #map-area {

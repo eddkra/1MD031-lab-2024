@@ -1,4 +1,3 @@
-/* GENERAL PAGE STYLING */
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -23,7 +22,6 @@ header span {
     color: black;
 }
 
-/* BURGER SECTION */
 #burger-section {
     background-color: black;
     color: white;
@@ -33,10 +31,13 @@ header span {
     max-width: 1200px;
 }
 
+.burger-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
 .burger-item {
-    display: inline-block;
-    width: 330px;
-    margin: 0 15px;
     background-color: #e5e5e5;
     border-radius: 6px;
     padding: 12px;
@@ -50,7 +51,6 @@ header span {
     border-radius: 4px;
 }
 
-/* CUSTOMER SECTION */
 #customer-section {
     padding: 30px 40px;
     border: 2px dotted gray;
@@ -59,9 +59,8 @@ header span {
     max-width: 900px;
 }
 
-#customer-section h2 {
-    font-size: 28px;
-    margin-bottom: 10px;
+#customer-section form {
+    width: fit-content;
 }
 
 #customer-section input,
@@ -72,58 +71,73 @@ header span {
     display: block;
 }
 
-.gender-option {
-    display: block;
+#gender-section {
+    margin-top: 20px;
 }
 
-/* MAP SECTION */
+.gender-title {
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.gender-grid {
+    display: grid;
+    grid-template-columns: auto auto;
+    row-gap: 14px;
+    column-gap: 0px;
+    align-items: center;
+}
+
+
+.gender-row {
+    display: contents;
+}
+
+.gender-row input[type="radio"] {
+    justify-self: end;
+}
+
+.gender-row label {
+    justify-self: start;
+}
+
 #map-section {
     margin-top: 40px;
 }
 
-#map-section h2 {
-    font-size: 28px;
-    margin-left: 25px;
-    margin-bottom: 20px;
-}
-
-/* The container that holds the map */
 #map-container {
     max-width: calc(1920px + 50px);
     padding: 0 25px;
     margin: 0 auto;
 }
 
-/* The responsive box that keeps aspect ratio */
 #map-wrapper {
     position: relative;
     width: 100%;
     aspect-ratio: 1920 / 1078;
-    overflow: hidden;
+    overflow: scroll;
     border: 2px solid #ccc;
 }
 
-/* The actual clickable map image */
 #map-image {
-    width: 100%;
-    height: 100%;
+    width: auto;
+    height: auto;
     object-fit: contain;
-    display: block;
     cursor: crosshair;
 }
 
-/* Click marker */
 #marker {
     position: absolute;
     width: 20px;
     height: 20px;
     background: blue;
-    border-radius: 50%;
-    z-index: 10;
-    transform: translate(-50%, -50%);
+    color: white;
+    border-radius: 4px;
+    text-align: center;
+    line-height: 20px;
+    font-weight: bold;
 }
 
-/* ORDER BUTTON */
 button {
     margin: 30px auto;
     display: block;
@@ -140,7 +154,6 @@ button:hover {
     cursor: pointer;
 }
 
-/* FOOTER */
 footer {
     text-align: center;
     padding: 20px;

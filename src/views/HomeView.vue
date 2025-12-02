@@ -11,18 +11,20 @@
         <h2>Select burger</h2>
         <p>This is where you execute burger selection</p>
 
-        <div 
-          class="burger-item"
-          v-for="(burger, index) in burgers"
-          :key="index"
-        >
-          <h3>{{ burger.name }}</h3>
-          <img :src="burger.img" :alt="burger.name">
-          <ul>
-            <li>{{ burger.kCal }} kCal</li>
-            <li v-if="burger.lactose">Contains lactose</li>
-            <li v-if="burger.gluten">Contains gluten</li>
-          </ul>
+        <div class="burger-grid">
+          <div
+            class="burger-item"
+            v-for="(burger, index) in burgers"
+            :key="index"
+          >
+            <h3>{{ burger.name }}</h3>
+            <img :src="burger.url" :alt="burger.name">
+            <ul>
+              <li>{{ burger.kCal }} kCal</li>
+              <li v-if="burger.lactose"><strong>Contains lactose</strong></li>
+              <li v-if="burger.gluten"><strong>Contains gluten</strong></li>
+            </ul>
+          </div>
         </div>
       </section>
 
@@ -42,16 +44,6 @@
           </p>
 
           <p>
-            <label>Street</label>
-            <input type="text" v-model="customer.street">
-          </p>
-
-          <p>
-            <label>House</label>
-            <input type="number" v-model="customer.house">
-          </p>
-
-          <p>
             <label>Payment options</label>
             <select v-model="customer.payment">
               <option>Credit card</option>
@@ -61,13 +53,29 @@
             </select>
           </p>
 
-          <p>
-            <label>Gender</label>
-            <label><input type="radio" value="male" v-model="customer.gender"> Male</label>
-            <label><input type="radio" value="female" v-model="customer.gender"> Female</label>
-            <label><input type="radio" value="nonbinary" v-model="customer.gender"> Non-binary</label>
-            <label><input type="radio" value="undisclosed" v-model="customer.gender"> Undisclosed</label>
-          </p>
+          <div id="gender-container">
+            <div class="gender-title">Gender</div>
+
+            <div class="gender-row">
+              <input type="radio" value="male" v-model="customer.gender">
+              <label>Male</label>
+            </div>
+
+            <div class="gender-row">
+              <input type="radio" value="female" v-model="customer.gender">
+              <label>Female</label>
+            </div>
+
+            <div class="gender-row">
+              <input type="radio" value="nonbinary" v-model="customer.gender">
+              <label>Non-binary</label>
+            </div>
+
+            <div class="gender-row">
+              <input type="radio" value="undisclosed" v-model="customer.gender">
+              <label>Undisclosed</label>
+            </div>
+          </div>
 
         </form>
       </section>
@@ -79,12 +87,12 @@
           <div id="map-wrapper">
             <img id="map-image" src="/img/polacks.jpg" @click="setLocation">
 
-            <div v-if="location"
-                id="marker"
-                :style="{ 
-                  left: location.x + 'px', 
-                  top: location.y + 'px' 
-                }">
+            <div
+              v-if="location"
+              id="marker"
+              :style="{ left: location.x + 'px', top: location.y + 'px' }"
+            >
+              T
             </div>
           </div>
         </div>
@@ -93,8 +101,10 @@
     </main>
 
     <button @click="placeOrder">
-      <img src="https://cdn-icons-png.flaticon.com/512/4297/4297679.png"
-           style="width: 20px; filter: invert(1); margin-right: 6px;">
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/4297/4297679.png"
+        style="width: 20px; filter: invert(1); margin-right: 6px;"
+      >
       Place my order!
     </button>
 
@@ -105,42 +115,31 @@
 
 <script>
 import io from "socket.io-client"
-const socket = io("http://localhost:3000")
+import menuData from "@/assets/menu.json"
 
-function MenuItem(name, kCal, lactose, gluten, img) {
-  this.name = name
-  this.kCal = kCal
-  this.lactose = lactose
-  this.gluten = gluten
-  this.img = img
-}
+const socket = io("http://localhost:3000")
 
 export default {
   data() {
     return {
       location: null,
-
       customer: {
         fullname: "",
         email: "",
-        street: "",
-        house: "",
         payment: "Credit card",
         gender: "male"
       },
-
-      burgers: [
-        new MenuItem("The Fire Burger", 750, true, true, "/img/fire-burger.jpg"),
-        new MenuItem("Fried Turkey Burger", 600, true, true, "/img/turkey-burger.jpg"),
-        new MenuItem("A Double w/ Cheese", 1800, true, true, "/img/double-cheese.jpg")
-      ]
+      burgers: menuData
     }
   },
 
   methods: {
+    getOrderNumber() {
+      return Math.floor(1000 + Math.random() * 100000)
+    },
+
     setLocation(event) {
       const rect = event.target.getBoundingClientRect()
-
       const clickX = event.clientX - rect.left
       const clickY = event.clientY - rect.top
 
@@ -158,7 +157,10 @@ export default {
         return
       }
 
+      const orderId = this.getOrderNumber()
+
       socket.emit("addOrder", {
+        orderId: orderId,
         orderItems: this.burgers.map(b => b.name),
         customer: this.customer,
         details: {
@@ -172,30 +174,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-#map-wrapper {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1920 / 1078;
-  overflow: hidden;
-  border: 2px solid #ccc;
-}
-
-#map-image {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  cursor: crosshair;
-}
-
-#marker {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background: blue;
-  border-radius: 50%;
-  z-index: 10;
-  transform: translate(-50%, -50%);
-}
-</style>

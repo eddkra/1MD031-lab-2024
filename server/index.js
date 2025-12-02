@@ -5,10 +5,10 @@ import { Server } from "socket.io";
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
-    cors: {
-      origin: "http://localhost:5173",
-      methods: ["GET"],
-      credentials: true
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET"],
+    credentials: true
   }
 });
 
@@ -65,7 +65,7 @@ io.on('connection', function (socket) {
 });
 
 const PORT = process.env.PORT || 3000;
-httpServer.listen(PORT, function() {
-    console.log("Socket.io server running on http://localhost:" + PORT);
+httpServer.listen(PORT, function () {
+  console.log("Socket.io server running on http://localhost:" + PORT);
 });
 
