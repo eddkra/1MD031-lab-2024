@@ -12,19 +12,14 @@
         <p>This is where you execute burger selection</p>
 
         <div class="burger-grid">
-          <div
-            class="burger-item"
+
+          <OneBurger
             v-for="(burger, index) in burgers"
             :key="index"
-          >
-            <h3>{{ burger.name }}</h3>
-            <img :src="burger.url" :alt="burger.name">
-            <ul>
-              <li>{{ burger.kCal }} kCal</li>
-              <li v-if="burger.lactose"><strong>Contains lactose</strong></li>
-              <li v-if="burger.gluten"><strong>Contains gluten</strong></li>
-            </ul>
-          </div>
+            :burger="burger"
+            @update-amount="updateBurgerAmount"
+          />
+
         </div>
       </section>
 
@@ -115,11 +110,22 @@
 
 <script>
 import io from "socket.io-client"
+import OneBurger from "@/components/OneBurger.vue"
 import menuData from "@/assets/menu.json"
 
 const socket = io("http://localhost:3000")
 
+function MenuItem(name, url, kCal, lactose, gluten) {
+  this.name = name
+  this.url = url
+  this.kCal = kCal
+  this.lactose = lactose
+  this.gluten = gluten
+}
+
 export default {
+  components: { OneBurger },
+
   data() {
     return {
       location: null,
@@ -129,13 +135,18 @@ export default {
         payment: "Credit card",
         gender: "male"
       },
-      burgers: menuData
+      burgers: menuData.map(b => ({ ...b })),
+      chosenAmounts: {}
     }
   },
 
   methods: {
     getOrderNumber() {
       return Math.floor(1000 + Math.random() * 100000)
+    },
+
+    updateBurgerAmount({ name, amount }) {
+      this.chosenAmounts[name] = amount
     },
 
     setLocation(event) {
@@ -159,9 +170,13 @@ export default {
 
       const orderId = this.getOrderNumber()
 
+      const orderItems = Object.entries(this.chosenAmounts)
+        .filter(([_, amount]) => amount > 0)
+        .map(([name, amount]) => ({ name, amount }))
+
       socket.emit("addOrder", {
         orderId: orderId,
-        orderItems: this.burgers.map(b => b.name),
+        orderItems: orderItems,
         customer: this.customer,
         details: {
           xPercent: this.location.xPercent,

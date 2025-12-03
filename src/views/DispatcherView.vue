@@ -12,16 +12,23 @@
         <div class="order-section">
           <strong>Items:</strong>
           <ul>
-            <li v-for="item in order.orderItems" :key="item">{{ item }}</li>
+            <li v-if="!order.orderItems">No items received</li>
+
+            <li 
+              v-for="(item, idx) in (order.orderItems || [])" 
+              :key="idx"
+            >
+              {{ formatItem(item) }}
+            </li>
           </ul>
         </div>
 
         <div class="order-section">
           <strong>Customer:</strong>
-          <div>{{ order.customer.fullname }}</div>
-          <div>{{ order.customer.email }}</div>
-          <div>Payment: {{ order.customer.payment }}</div>
-          <div>Gender: {{ order.customer.gender }}</div>
+          <div>{{ order.customer?.fullname || 'No name' }}</div>
+          <div>{{ order.customer?.email || 'No email' }}</div>
+          <div>Payment: {{ order.customer?.payment || 'N/A' }}</div>
+          <div>Gender: {{ order.customer?.gender || 'N/A' }}</div>
         </div>
       </div>
 
@@ -36,8 +43,8 @@
         :key="'dot' + key"
         class="dot"
         :style="{ 
-          left:  (order.details.xPercent * 1920) + 'px',
-          top:   (order.details.yPercent * 1078) + 'px'
+          left:  ((order.details?.xPercent || 0) * 1920) + 'px',
+          top:   ((order.details?.yPercent || 0) * 1078) + 'px'
         }"
       >
         {{ key }}
@@ -61,11 +68,13 @@ export default {
   },
 
   created() {
-    socket.on("currentQueue", (data) => {
-      this.orders = data.orders
+    socket.on("currentQueue", data => {
+      console.log("QUEUE →", data)
+      this.orders = data.orders || {}
     })
 
-    socket.on("orderAdded", (data) => {
+    socket.on("orderAdded", data => {
+      console.log("ORDER ADDED →", data)
       this.orders[data.orderId] = data
     })
 
@@ -77,12 +86,23 @@ export default {
   methods: {
     clearQueue() {
       socket.emit("clearQueue")
+    },
+
+    formatItem(item) {
+      if (!item) return "Unknown item"
+
+      if (typeof item === "string") return item
+      if (item.name && item.amount !== undefined)
+        return `${item.amount}× ${item.name}`
+
+      return JSON.stringify(item)
     }
   }
 }
 </script>
 
 <style scoped>
+/* your CSS unchanged */
 #dispatcher {
   position: relative;
 }
